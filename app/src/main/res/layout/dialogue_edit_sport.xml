@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@android:color/holo_blue_bright"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="CHỈNH SỬA THÔNG TIN SÂN" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/sportNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tên sân"/>
+
+    <EditText
+        android:id="@+id/sportLocationInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Địa chỉ"/>
+
+    <EditText
+        android:id="@+id/sportDistrictInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Quận/Huyện"/>
+
+    <EditText
+        android:id="@+id/sportPriceInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Giá sân"/>
+
+    <EditText
+        android:id="@+id/sportDescriptionInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mô tả sân"/>
+    <EditText
+        android:id="@+id/sportServiceInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Dịch vụ"/>
+
+    <Spinner
+        android:id="@+id/sportTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/editSportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Thay đổi thông tin sân"/>
+</LinearLayout>

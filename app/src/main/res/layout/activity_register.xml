@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pngtreesports_competition_hd_background_1052710_1_"
+    android:backgroundTint="#084B49"
+    android:backgroundTintMode="add"
+    android:padding="10dp"
+    tools:context=".LoginActivity">
+
+    <EditText
+        android:id="@+id/userNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/passwordText"
+        android:layout_marginBottom="16dp"
+        android:background="#6878E9"
+        android:hint="Tên tài khoản"
+        android:padding="5dp"
+        android:textSize="24sp" />
+
+
+    <EditText
+        android:id="@+id/passwordText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/signupButton"
+        android:layout_marginBottom="16dp"
+        android:background="#6878E9"
+        android:hint="Mật khẩu"
+        android:padding="5dp"
+        android:textSize="24sp" />
+
+
+    <Button
+
+        android:id="@+id/signupButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:backgroundTint="#1d2731"
+        android:text="Đăng ký"
+        android:textSize="24sp" />
+
+
+    <TextView
+
+        android:id="@+id/textLogin"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/signupButton"
+
+        android:textSize="24sp"
+
+        android:text="Đã là người dùng? Đăng nhập"
+
+        android:layout_centerHorizontal="true"
+
+        android:textColor="#ffbb39"
+
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/userNameText"
+        android:layout_marginBottom="21dp"
+        android:padding="20dp"
+        android:text="ĐĂNG KÝ TÀI KHOẢN"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

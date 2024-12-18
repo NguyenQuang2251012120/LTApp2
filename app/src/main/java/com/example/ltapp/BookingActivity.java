@@ -2,7 +2,10 @@ package com.example.ltapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,6 +15,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +27,15 @@ import androidx.core.view.WindowInsetsCompat;
 import android.content.res.ColorStateList;
 import android.widget.Toast;
 
+import com.example.ltapp.Api.CreateOrder;
+
+import org.json.JSONObject;
+
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
+
 public class BookingActivity extends AppCompatActivity {
     private Button btnDay1, btnDay2, btnDay3, btnDay4;
     private Button selectedButton = null;
@@ -30,17 +44,29 @@ public class BookingActivity extends AppCompatActivity {
     private Button btnBook;
     private TextView txtTotalPrice;
     private int defaultButtonColor;
-    private static final int PRICE_PER_SLOT = 106000; // Giá tiền cho mỗi múi giờ
+    private int PRICE_PER_SLOT;
     private int totalPrice = 0;
     private ConstraintLayout btBack;
     private DatabaseHelper dbHelper;
+    private MyDatabase db;
+    private Map<Button, Set<Button>> dateTimeSelections = new HashMap<>();
+    private Map<Button, Integer> dateTotalPrices = new HashMap<>();
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_booking);
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
+        // Kiểm tra AppID và Environment
+        ZaloPaySDK.init(2553, Environment.SANDBOX); // Đảm bảo AppID khớp với AppInfo.APP_ID
+
+        Intent intent = getIntent();
 
         btBack = findViewById(R.id.btBack);
         btBack.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +80,10 @@ public class BookingActivity extends AppCompatActivity {
         btnDay2 = findViewById(R.id.btnDay2);
         btnDay3 = findViewById(R.id.btnDay3);
         btnDay4 = findViewById(R.id.btnDay4);
+        dbHelper = new DatabaseHelper(this);
+        int PRICE_PER_SLOT = getIntent().getIntExtra("sportPrice", 0);
+
+        db = new MyDatabase(this);
 
 
         defaultButtonColor = btnDay1.getBackgroundTintList().getDefaultColor();
@@ -72,18 +102,29 @@ public class BookingActivity extends AppCompatActivity {
         // Set ngày cho các button
         setDatesForButtons();
 
+        // Ẩn tất cả các nút múi giờ khi khởi tạo
+        for (Button timeButton : timeButtons) {
+            timeButton.setVisibility(View.INVISIBLE);
+        }
+
         // Xử lý sự kiện click cho các button ngày
         View.OnClickListener dateClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Button clickedButton = (Button) v;
-                
+
+                // Lưu lựa chọn hiện tại trước khi chuyển ngày
+                if (selectedButton != null) {
+                    dateTimeSelections.put(selectedButton, new HashSet<>(selectedTimeButtons));
+                    dateTotalPrices.put(selectedButton, totalPrice);
+                }
+
                 if (clickedButton == selectedButton) {
                     // Trở về màu ban đầu khi bỏ chọn
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
                     clickedButton.setTextColor(getResources().getColor(R.color.blue));
                     selectedButton = null;
-                    // Reset tổng tiền khi bỏ chọn ngày
+                    selectedTimeButtons.clear();
                     totalPrice = 0;
                 } else {
                     // Đặt lại màu cho button trước đó
@@ -95,15 +136,31 @@ public class BookingActivity extends AppCompatActivity {
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
                     clickedButton.setTextColor(getResources().getColor(android.R.color.white));
                     selectedButton = clickedButton;
+
+                    // Khôi phục lựa chọn cho ngày được chọn
+                    selectedTimeButtons.clear();
+                    if (dateTimeSelections.containsKey(clickedButton)) {
+                        selectedTimeButtons.addAll(dateTimeSelections.get(clickedButton));
+                        totalPrice = dateTotalPrices.get(clickedButton);
+                    } else {
+                        totalPrice = 0;
+                    }
                 }
 
-                // Reset tất cả các nút giờ về trạng thái unselected
+                // Cập nhật hiển thị của các nút giờ
+                updateTimeButtonsVisibility();
+
+                // Reset hiển thị của tất cả các nút giờ
                 for (Button timeButton : timeButtons) {
-                    timeButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
-                    timeButton.setTextColor(getResources().getColor(R.color.blue));
+                    if (selectedTimeButtons.contains(timeButton)) {
+                        timeButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+                        timeButton.setTextColor(getResources().getColor(android.R.color.white));
+                    } else {
+                        timeButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
+                        timeButton.setTextColor(getResources().getColor(R.color.blue));
+                    }
                 }
-                selectedTimeButtons.clear();
-                
+
                 updateBookButtonAndPrice();
             }
         };
@@ -111,21 +168,37 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Button clickedButton = (Button) v;
-                
+
                 if (selectedTimeButtons.contains(clickedButton)) {
                     // Bỏ chọn time slot
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
                     clickedButton.setTextColor(getResources().getColor(R.color.blue));
                     selectedTimeButtons.remove(clickedButton);
-                    // Giảm tổng tiền khi bỏ chọn múi giờ
                     totalPrice -= PRICE_PER_SLOT;
+
+                    // Cập nhật lựa chọn cho ngày hiện tại
+                    if (selectedButton != null) {
+                        dateTimeSelections.put(selectedButton, new HashSet<>(selectedTimeButtons));
+                        dateTotalPrices.put(selectedButton, totalPrice);
+
+                        // Kích hoạt lại nút ngày nếu không còn múi giờ nào được chọn
+                        if (selectedTimeButtons.isEmpty()) {
+                            selectedButton.setEnabled(true);
+                        }
+                    }
                 } else {
                     // Thêm time slot mới
                     clickedButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
                     clickedButton.setTextColor(getResources().getColor(android.R.color.white));
                     selectedTimeButtons.add(clickedButton);
-                    // Tăng tổng tiền khi chọn thêm múi giờ
                     totalPrice += PRICE_PER_SLOT;
+
+                    // Cập nhật lựa chọn cho ngày hiện tại
+                    if (selectedButton != null) {
+                        dateTimeSelections.put(selectedButton, new HashSet<>(selectedTimeButtons));
+                        dateTotalPrices.put(selectedButton, totalPrice);
+                        selectedButton.setEnabled(false);
+                    }
                 }
                 updateBookButtonAndPrice();
             }
@@ -148,15 +221,68 @@ public class BookingActivity extends AppCompatActivity {
             return insets;
         });
 
-        dbHelper = new DatabaseHelper(this);
-        
         // Thêm xử lý click cho nút Book
         btnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveBooking();
+                Log.d("ZaloPay", "Button clicked");
+                CreateOrder orderApi = new CreateOrder();
+                try {
+                    Log.d("ZaloPay", "Creating order...");
+                    JSONObject data = orderApi.createOrder(txtTotalPrice.getText().toString());
+                    String code = data.getString("return_code");
+                    Log.d("ZaloPay", "Return code: " + code);
+
+                    if (code.equals("1")) {
+                        String token = data.getString("zp_trans_token");
+                        Log.d("ZaloPay", "Token: " + token);
+
+                        if (token == null || token.isEmpty()) {
+                            Log.e("ZaloPay", "Token is null or empty");
+                            return;
+                        }
+
+                        ZaloPaySDK.getInstance().payOrder(BookingActivity.this, token, "demozpdk://app", new PayOrderListener() {
+                            @Override
+                            public void onPaymentSucceeded(String s, String s1, String s2) {
+                                Log.d("ZaloPay", "Payment succeeded");
+                                Intent intent1 = new Intent(BookingActivity.this, PaymentNotification.class);
+                                intent1.putExtra("result", "Thanh toán thành công!");
+                                startActivity(intent1);
+                                saveBooking();
+                            }
+
+                            @Override
+                            public void onPaymentCanceled(String s, String s1) {
+                                Log.d("ZaloPay", "Payment canceled");
+                                Intent intent1 = new Intent(BookingActivity.this, PaymentNotification.class);
+                                intent1.putExtra("result", "Hủy thanh toán!");
+                                startActivity(intent1);
+                            }
+
+                            @Override
+                            public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+                                Log.e("ZaloPay", "Payment error: " + zaloPayError.toString());
+                                Intent intent1 = new Intent(BookingActivity.this, PaymentNotification.class);
+                                intent1.putExtra("result", "Lỗi thanh toán!");
+                                startActivity(intent1);
+                            }
+                        });
+                    } else {
+                        Log.e("ZaloPay", "Invalid return code: " + code);
+                    }
+                } catch (Exception e) {
+                    Log.e("ZaloPay", "Error: " + e.getMessage());
+                    e.printStackTrace();
+                    Toast.makeText(BookingActivity.this, "Có lỗi xảy ra: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
     }
 
     private void setDatesForButtons() {
@@ -186,13 +312,25 @@ public class BookingActivity extends AppCompatActivity {
     private void updateBookButtonAndPrice() {
         // Kiểm tra xem đã chọn ngày và ít nhất 1 múi giờ chưa
         boolean isDateAndTimeSelected = (selectedButton != null && !selectedTimeButtons.isEmpty());
-        
+
         // Enable/disable nút đặt sân
         btnBook.setEnabled(isDateAndTimeSelected);
-        
-        // Cập nhật hiển thị giá tiền
-        if (totalPrice > 0) {
-            String formattedPrice = String.format(Locale.getDefault(), "%,d", totalPrice);
+
+        // Vô hiệu hóa nút ngày đã chọn nếu có múi giờ được chọn
+        if (!selectedTimeButtons.isEmpty() && selectedButton != null) {
+            selectedButton.setEnabled(false);
+        } else {
+            // Kích hoạt lại tất cả các nút ngày
+            btnDay1.setEnabled(true);
+            btnDay2.setEnabled(true);
+            btnDay3.setEnabled(true);
+            btnDay4.setEnabled(true);
+        }
+
+        // Cập nhật hiển thị tổng tiền của tất cả các ngày
+        int totalAllDays = calculateTotalPriceAllDays();
+        if (totalAllDays > 0) {
+            String formattedPrice = String.format(Locale.getDefault(), "%,d", totalAllDays);
             txtTotalPrice.setText("Thành tiền: " + formattedPrice + "đ");
         } else {
             txtTotalPrice.setText("Thành tiền: 0đ");
@@ -203,7 +341,7 @@ public class BookingActivity extends AppCompatActivity {
         if (selectedButton != null && !selectedTimeButtons.isEmpty()) {
             // Lấy ngày đã chọn
             String selectedDate = selectedButton.getText().toString();
-            
+
             // Tạo chuỗi chứa các múi giờ đã chọn
             StringBuilder timeSlots = new StringBuilder();
             for (Button timeButton : selectedTimeButtons) {
@@ -212,15 +350,17 @@ public class BookingActivity extends AppCompatActivity {
                 }
                 timeSlots.append(timeButton.getText().toString());
             }
-            
-            // Lưu vào database (court_number = 0 cho sân chính)
-            long result = dbHelper.addBooking(
-                selectedDate,
-                timeSlots.toString(),
-                totalPrice,
-                0
-            );
-            
+
+            // Sử dụng tổng tiền của tất cả các ngày
+            int totalAllDays = calculateTotalPriceAllDays();
+            String sportName = getIntent().getStringExtra("sportName");
+            sharedPreferences = getSharedPreferences("LoginUser", MODE_PRIVATE);
+            String loggedInUser = sharedPreferences.getString("User", null);
+
+            // Lưu vào database với tổng tiền của tất cả các ngày
+            booking book = new booking(selectedDate, loggedInUser ,timeSlots.toString(), totalAllDays, 0, sportName);
+            long result = db.addBooking(book);
+
             if (result != -1) {
                 // Thông báo đặt sân thành công
                 Toast.makeText(this, "Đặt sân thành công!", Toast.LENGTH_SHORT).show();
@@ -229,6 +369,31 @@ public class BookingActivity extends AppCompatActivity {
                 // Thông báo lỗi
                 Toast.makeText(this, "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    // Thêm phương thức để tính tổng tiền của tất cả các ngày
+    private int calculateTotalPriceAllDays() {
+        int total = 0;
+        for (Integer price : dateTotalPrices.values()) {
+            total += price;
+        }
+        return total;
+    }
+
+    // Thêm phương thức để ẩn/hiện các nút múi giờ
+    private void updateTimeButtonsVisibility() {
+        int visibility = (selectedButton != null) ? View.VISIBLE : View.INVISIBLE;
+        for (Button timeButton : timeButtons) {
+            timeButton.setVisibility(visibility);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            db.close();  // Close the database connection when the activity is destroyed
         }
     }
 }

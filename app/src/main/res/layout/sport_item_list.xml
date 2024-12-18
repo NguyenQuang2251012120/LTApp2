@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/sportName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sport Name"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/sportLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"/>
+
+    <TextView
+        android:id="@+id/sportDistrict"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="District"/>
+
+    <TextView
+        android:id="@+id/sportPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"/>
+
+    <TextView
+        android:id="@+id/sportDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"/>
+
+    <TextView
+        android:id="@+id/sportType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sport type"/>
+
+    <TextView
+        android:id="@+id/sportService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service"/>
+</LinearLayout>

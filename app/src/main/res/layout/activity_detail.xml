@@ -46,6 +46,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/sportName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -55,7 +56,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_address"
+            android:id="@+id/sportLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
@@ -66,7 +67,7 @@
 
 
         <TextView
-            android:id="@+id/tv_price"
+            android:id="@+id/sportPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -82,29 +83,29 @@
             android:textSize="15dp"
             android:textStyle="bold"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trọng tài" />
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gửi xe" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trọng tài" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Huấn luyện viên" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gửi xe" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Huấn luyện viên" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -128,6 +129,7 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/sportDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -150,6 +152,7 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/sportService"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -164,11 +167,11 @@
                 android:padding="16dp">
 
                 <Button
-                    android:id="@+id/btn_message"
+                    android:id="@+id/btn_yeuthich"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Nhắn tin" />
+                    android:text="Yêu thích" />
 
                 <Button
                     android:id="@+id/btn_book"
@@ -179,6 +182,69 @@
 
             </LinearLayout>
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đánh giá và bình luận"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/tv_average_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:text="0.0 ★"/>
+
+
+            </LinearLayout>
+
+            <RatingBar
+                android:id="@+id/rating_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"/>
+
+            <EditText
+                android:id="@+id/et_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Viết bình luận của bạn"
+                android:minLines="2"
+                android:maxLines="4"/>
+
+            <Button
+                android:id="@+id/btn_post_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đăng bình luận"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_comments"
+                android:layout_width="match_parent"
+                android:layout_height="146dp"
+                android:layout_marginTop="16dp" />
 
         </LinearLayout>
 

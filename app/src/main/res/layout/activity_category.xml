@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="40sp">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản lý danh mục"
+        android:textSize="30sp"
+        android:layout_marginBottom="30sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="131dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30sp" />
+
+
+    <Button
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonThem"
+        android:layout_width="129dp"
+        android:layout_height="66dp"
+        android:text="Thêm danh mục" />
+
+    <Button
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonXoa"
+        android:layout_width="129dp"
+        android:layout_height="66dp"
+        android:text="Xóa danh mục" />
+
+    <Button
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonSua"
+        android:layout_width="129dp"
+        android:layout_height="66dp"
+        android:text="Sửa danh mục" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="60dp"
+        android:padding="50sp">
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navmenu" />
+
+
+</LinearLayout>

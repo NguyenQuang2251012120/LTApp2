@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Người dùng"
+        android:icon="@drawable/ic_user"
+        android:id="@+id/btUserManage"/>
+
+    <item android:title="Danh mục"
+        android:icon="@drawable/baseline_align_horizontal_left_24"
+        android:id="@+id/btCategoryManage"/>
+    <item android:title="Sân"
+        android:icon="@drawable/ic_location"
+        android:id="@+id/btSportManage"/>
+    <item android:title="Doanh thu"
+        android:icon="@drawable/baseline_align_vertical_bottom_24"
+        android:id="@+id/btStatics"/>
+    <item android:title="Tài khoản"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:id="@+id/btAUser"/>
+
+
+</menu>

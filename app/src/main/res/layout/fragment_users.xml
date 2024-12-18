@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
@@ -20,7 +21,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btBack"
+                android:id="@+id/backTc"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:clickable="true"
@@ -42,26 +43,32 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="586dp"
+            android:layout_height="584dp"
             android:layout_gravity="bottom"
             android:background="@color/lightgray"
             android:orientation="vertical">
 
 
             <LinearLayout
+                android:id="@+id/logoutLinear"
                 android:layout_width="364dp"
                 android:layout_height="94dp"
-                android:background="@color/white"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginRight="20dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/logout"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/background_oval">
+                    android:background="@drawable/background_oval"
+                    android:clickable="true"
+                    android:focusable="true">
 
 
                     <ImageView
@@ -83,13 +90,66 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"
                     android:text="Đăng xuất"
-                    android:textSize="25dp"/>
+                    android:textSize="25dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/deleteLinear"
+                android:layout_width="364dp"
+                android:layout_height="94dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/delete"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/background_oval2"
+                    android:clickable="true"
+                    android:focusable="true">
+
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/baseline_delete_forever_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:text="Xoá tài khoản"
+                    android:textSize="25dp" />
 
             </LinearLayout>
 
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        </LinearLayout>
+
 
     </FrameLayout>
+
+
 </LinearLayout>
