@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AdminSystem</string>
+    <string name="app_name">Đặt sân thể thao</string>
     <string-array name="usertype_array">
         <item>user</item>
         <item>admin</item>

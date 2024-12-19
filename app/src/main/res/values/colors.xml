@@ -12,4 +12,6 @@
     <color name="c1">#B993D6</color>
     <color name="c2">#8CA6DB</color>
     <color name="background">#F5F5F5</color>"
+    <color name="selected_item_color">#FFEB3B</color> <!-- Yellow color for selected item -->
+    <color name="default_item_color">#FFFFFF</color> <!-- White color for default item -->
 </resources>

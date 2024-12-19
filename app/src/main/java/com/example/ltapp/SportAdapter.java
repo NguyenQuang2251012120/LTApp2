@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> {
     private List<Sport> sports;
     private Context context;
+    private int selectedPosition = RecyclerView.NO_POSITION;
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
@@ -42,9 +44,22 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.ViewHolder> 
         holder.sportType.setText(sport.getS_TYPE());
         holder.sportService.setText(sport.getS_SERVICE());
 
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(position));
-    }
+        // Change the background color of the selected item
+        if (selectedPosition == position) {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_color));
+        } else {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.default_item_color));
+        }
 
+        holder.itemView.setOnClickListener(v -> {
+            // Notify the listener of the selected position
+            onItemClickListener.onItemClick(position);
+            // Update the selected position and refresh the RecyclerView
+            notifyItemChanged(selectedPosition);
+            selectedPosition = holder.getAdapterPosition();
+            notifyItemChanged(selectedPosition);
+        });
+    }
 
     @Override
     public int getItemCount() {

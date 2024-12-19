@@ -84,7 +84,7 @@ public class ProfitFragment extends Fragment {
         for (Pair<String, Integer> pair : profitList) {
             totalProfit += pair.second;
         }
-        tvTotalProfit.setText("Total Profit: " + totalProfit + " đ");
+        tvTotalProfit.setText("Tổng doanh thu: " + totalProfit + " đ");
     }
 
     @Override

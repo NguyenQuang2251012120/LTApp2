@@ -4,6 +4,7 @@ package com.example.ltapp;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class MyDatabase {
     SQLiteDatabase database;
     DatabaseHelper dbHelper;
+    SharedPreferences sharedPreferences;
 
     public MyDatabase(Context context) {
         dbHelper = new DatabaseHelper(context);
@@ -431,5 +433,11 @@ public class MyDatabase {
 
         cursor.close();
         return profitMap;
+    }
+
+    public void updateBookingCourtName(String oldName, String newName) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_COURT_NAME, newName);
+        database.update(DatabaseHelper.TABLE_BOOKINGS, values, DatabaseHelper.COLUMN_COURT_NAME + " = ?", new String[]{oldName});
     }
 }

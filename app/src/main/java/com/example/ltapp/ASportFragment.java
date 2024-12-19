@@ -111,7 +111,7 @@ public class ASportFragment extends Fragment {
         EditText sportDescriptionInput = view.findViewById(R.id.sportDescriptionInput);
         EditText sportServiceInput = view.findViewById(R.id.sportServiceInput);
         Spinner sportTypeSpinner = view.findViewById(R.id.sportTypeSpinner);
-        Button addSportButton = view.findViewById(R.id.editSportButton);
+        Button editSportButton = view.findViewById(R.id.editSportButton);
 
         Sport sport = sportList.get(position);
         sportNameInput.setText(sport.getS_NAME());
@@ -119,6 +119,7 @@ public class ASportFragment extends Fragment {
         sportDistrictInput.setText(sport.getS_DISTRICT());
         sportPriceInput.setText(sport.getS_PRICE());
         sportDescriptionInput.setText(sport.getS_DESCRIPTION());
+        sportServiceInput.setText(sport.getS_SERVICE());
 
         // Populate spinner with category data
         List<category> categories = db.getAllCategories();
@@ -129,7 +130,7 @@ public class ASportFragment extends Fragment {
         builder.setView(view);
         AlertDialog dialog = builder.create();
 
-        addSportButton.setOnClickListener(v -> {
+        editSportButton.setOnClickListener(v -> {
             String sportName = sportNameInput.getText().toString().trim();
             String sportLocation = sportLocationInput.getText().toString().trim();
             String sportDistrict = sportDistrictInput.getText().toString().trim();
@@ -139,6 +140,7 @@ public class ASportFragment extends Fragment {
             String sportService = sportServiceInput.getText().toString();
 
             if (!sportName.isEmpty() && !sportLocation.isEmpty() && !sportDistrict.isEmpty() && !sportPrice.isEmpty() && !sportDescription.isEmpty()) {
+                db.updateBookingCourtName(sport.getS_NAME(), sportName);
                 Sport updatedSport = new Sport(sport.getS_ID(), sportType, sportName, sportLocation, sportDistrict, "", sportPrice, sportDescription, sportService);
                 db.updateSport(updatedSport);
                 sportList.set(position, updatedSport);

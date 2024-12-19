@@ -17,6 +17,8 @@
         android:layout_above="@id/passwordText"
         android:layout_marginBottom="16dp"
         android:background="#6878E9"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         android:hint="Tên tài khoản"
         android:padding="5dp"
         android:textSize="24sp" />
@@ -27,7 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/loginButton"
         android:layout_marginBottom="16dp"
+        android:maxLines="1"
         android:background="#6878E9"
+        android:imeOptions="actionDone"
         android:hint="Mật khẩu"
         android:padding="5dp"
         android:textSize="24sp" />

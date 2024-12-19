@@ -13,24 +13,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class AUserFragment extends Fragment {
+public class AUserFragment extends Fragment implements AUserAdapter.OnUserSelectedListener {
 
     public static DatabaseHelper dbHelper;
     private EditText usernameEditText, passwordEditText;
     public AutoCompleteTextView searchAutoCompleteTextView;
-    private RecyclerView horizontalUserRecyclerView;
     private Spinner usertypeSpinner;
-    public static ListView userListView, horizontalUserListView;
+    public static ListView userListView;
     public AUserAdapter AuserAdapter;
     public List<User> userList;
-    public  MyDatabase database;
+    public MyDatabase database;
     public int selectedUserId;
 
     @Nullable
@@ -56,14 +52,6 @@ public class AUserFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         usertypeSpinner.setAdapter(adapter);
         loadUserList();
-
-        userListView.setOnItemClickListener((parent, view1, position, id) -> {
-            User selectedUser = userList.get(position);
-            selectedUserId = selectedUser.getU_ID();
-            usernameEditText.setText(selectedUser.getU_USERNAME());
-            passwordEditText.setText(selectedUser.getU_PASSWORD());
-            usertypeSpinner.setSelection(adapter.getPosition(selectedUser.getU_USERTYPE()));
-        });
 
         view.findViewById(R.id.addUser).setOnClickListener(v -> {
             String username = usernameEditText.getText().toString().trim();
@@ -109,14 +97,22 @@ public class AUserFragment extends Fragment {
                 loadUserList();
             }
         });
-
-
     }
 
     private void loadUserList() {
         userList = database.getAllUsers();
-        AuserAdapter = new AUserAdapter(getActivity(), userList);
+        AuserAdapter = new AUserAdapter(getActivity(), userList, this);
         userListView.setAdapter(AuserAdapter);
+    }
+
+    @Override
+    public void onUserSelected(User user) {
+        selectedUserId = user.getU_ID();
+        usernameEditText.setText(user.getU_USERNAME());
+        passwordEditText.setText(user.getU_PASSWORD());
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.usertype_array, android.R.layout.simple_spinner_item);
+        usertypeSpinner.setSelection(adapter.getPosition(user.getU_USERTYPE()));
     }
 
     @Override
