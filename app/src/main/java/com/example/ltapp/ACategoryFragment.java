@@ -102,12 +102,16 @@ public class ACategoryFragment extends Fragment {
             String newCategoryName = categoryNameInput.getText().toString().trim();
             if (!newCategoryName.isEmpty()) {
                 category updatedCategory = new category(categoryList.get(position).getId(), newCategoryName);
+                if (!db.categoryExists(updatedCategory)) {
                 db.updateCategory(categoryList.get(position).getId(), updatedCategory);
                 categoryList.set(position, updatedCategory);
                 categoryAdapter.notifyDataSetChanged();
                 dialog.dismiss();
+                } else {
+                    categoryNameInput.setError("Danh mục đã tồn tại");
+                }
             } else {
-                categoryNameInput.setError("Category name cannot be empty");
+                categoryNameInput.setError("Ô danh mục không được để trống");
             }
         });
 

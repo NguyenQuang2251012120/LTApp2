@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@android:color/darker_gray"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"/>
+
+    <TextView
+        android:id="@+id/timeSlots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time Slots"/>
+
+    <TextView
+        android:id="@+id/totalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Price"/>
+
+    <TextView
+        android:id="@+id/courtNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Court Number"/>
+
+    <TextView
+        android:id="@+id/courtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Court Name"/>
+</LinearLayout>

@@ -440,4 +440,52 @@ public class MyDatabase {
         values.put(DatabaseHelper.COLUMN_COURT_NAME, newName);
         database.update(DatabaseHelper.TABLE_BOOKINGS, values, DatabaseHelper.COLUMN_COURT_NAME + " = ?", new String[]{oldName});
     }
+
+    public List<booking> getBookingsByUsername(String username) {
+        List<booking> bookingList = new ArrayList<>();
+        if (username == null || username.isEmpty()) {
+            return bookingList;
+        }
+
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_BOOKINGS + " WHERE " + DatabaseHelper.COLUMN_USERNAMEORDER + " = ?";
+        Cursor cursor = database.rawQuery(selectQuery, new String[]{username});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+                String date = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
+                String timeSlots = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_SLOTS));
+                int totalPrice = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TOTAL_PRICE));
+                int courtNumber = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_COURT_NUMBER));
+                String courtName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_COURT_NAME));
+
+                booking booking = new booking(date, username, timeSlots, totalPrice, courtNumber, courtName);
+                bookingList.add(booking);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return bookingList;
+    }
+
+    public List<booking> getAllBookings() {
+        List<booking> bookings = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_BOOKINGS, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID));
+                String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAMEORDER));
+                String date = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
+                String timeSlots = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TIME_SLOTS));
+                int totalPrice = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_TOTAL_PRICE));
+                int courtNumber = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_COURT_NUMBER));
+                String courtName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_COURT_NAME));
+                booking booking = new booking(date, username, timeSlots, totalPrice, courtNumber, courtName);
+                bookings.add(booking);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        return bookings;
+    }
 }

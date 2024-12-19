@@ -84,13 +84,13 @@ public class AUserFragment extends Fragment implements AUserAdapter.OnUserSelect
             String usertype = usertypeSpinner.getSelectedItem().toString().trim();
 
             if (username.isEmpty() || password.isEmpty() || usertype.isEmpty()) {
-                Toast.makeText(getContext(), "Please fill out all fields.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Vui lòng nhập hết tất cả ô.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Check if the username already exists for a different user
             if (database.checkUsernameExistsExcludingCurrentUser(username)) {
-                Toast.makeText(getContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Tên người dùng đã tồn tại.", Toast.LENGTH_SHORT).show();
             } else {
                 User user = new User(selectedUserId, username, password, usertype);
                 database.updateUser(user);

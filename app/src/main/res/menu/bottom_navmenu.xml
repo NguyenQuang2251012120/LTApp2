@@ -7,6 +7,9 @@
     <item android:title="Yêu thích"
         android:icon="@drawable/ic_favorite"
         android:id="@+id/btYeuthich"/>
+    <item android:title="Lịch sử đặt hàng"
+        android:icon="@drawable/baseline_access_time_24"
+        android:id="@+id/btBookingHistory"/>
     <item android:title="Người dùng"
         android:icon="@drawable/ic_user"
         android:id="@+id/btUsers"/>

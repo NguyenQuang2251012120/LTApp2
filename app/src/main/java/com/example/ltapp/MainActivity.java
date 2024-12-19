@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btYeuthich:
                     replaceFragment(new FavoriteFragment());
                     break;
+                    case R.id.btBookingHistory:
+                        replaceFragment(new BookingHistoryFragment());
+                        break;
                 case R.id.btUsers:
                     replaceFragment(new UsersFragment());
                     break;
