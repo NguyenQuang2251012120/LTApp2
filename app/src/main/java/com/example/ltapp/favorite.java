@@ -1,12 +1,14 @@
 package com.example.ltapp;
 
 public class favorite {
+    private String id;
     private String  user;
     private String Sport_name;
     private String Sport_price;
     private String Sport_district;
 
-    public favorite(String user, String Sport_name, String Sport_price, String Sport_district) {
+    public favorite(String id, String user, String Sport_name, String Sport_price, String Sport_district) {
+        this.id = id;
         this.user = user;
         this.Sport_name = Sport_name;
         this.Sport_price = Sport_price;
@@ -44,5 +46,13 @@ public class favorite {
 
     public void setSport_district(String sport_district) {
         Sport_district = sport_district;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

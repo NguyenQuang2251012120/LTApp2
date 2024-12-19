@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "DuLieuData.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public static final String TABLE_FAVORITES = "favorite";
+    public static final String C_FAVORITE_ID = "id";
     public static final String C_FAVORITE_USER = "user";
     public static final String C_FAVORITE_NAME = "Sport_name";
     public static final String C_FAVORITE_PRICE = "Sport_price";
@@ -59,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_FAVORITE = ""
             + "CREATE TABLE " + TABLE_FAVORITES + " ( "
+            + C_FAVORITE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + C_FAVORITE_USER + " TEXT NOT NULL, "
             + C_FAVORITE_NAME + " TEXT NOT NULL, "
             + C_FAVORITE_PRICE + " TEXT NOT NULL, "

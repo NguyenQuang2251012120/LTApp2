@@ -330,7 +330,7 @@ public class MyDatabase {
         values.put(DatabaseHelper.C_FAVORITE_DISTRICT, favorite.getSport_district());
 
         // Insert the favorite sport into the database
-        database.insert(DatabaseHelper.TABLE_FAVORITES, null, values);
+        long id = database.insert(DatabaseHelper.TABLE_FAVORITES, null, values);
     }
 
     // Method to remove a sport from favorites for the logged-in user

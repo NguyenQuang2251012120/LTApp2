@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,8 +85,20 @@ public class ASportFragment extends Fragment {
             String sportDistrict = sportDistrictInput.getText().toString().trim();
             String sportPrice = sportPriceInput.getText().toString().trim();
             String sportDescription = sportDescriptionInput.getText().toString().trim();
-            String sportType = sportTypeSpinner.getSelectedItem().toString();
             String sportService = sportServiceInput.getText().toString().trim();
+
+            if (sportTypeSpinner.getCount() == 0) {
+                Toast.makeText(getContext(), "Vui lòng thêm danh mục trước khi tạo sân", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Object selectedItem = sportTypeSpinner.getSelectedItem();
+            if (selectedItem == null) {
+                Toast.makeText(getContext(), "Vui lòng chọn một danh mục hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String sportType = selectedItem.toString();
 
             if (!sportName.isEmpty() && !sportLocation.isEmpty() && !sportDistrict.isEmpty() && !sportPrice.isEmpty() && !sportDescription.isEmpty()) {
                 Sport newSport = new Sport("", sportType, sportName, sportLocation, sportDistrict, "", sportPrice, sportDescription, sportService);
@@ -94,10 +107,9 @@ public class ASportFragment extends Fragment {
                 sportAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             } else {
-                // Show error message
+                Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin trước khi tạo sân", Toast.LENGTH_SHORT).show();
             }
         });
-
         dialog.show();
     }
 
@@ -111,7 +123,7 @@ public class ASportFragment extends Fragment {
         EditText sportDescriptionInput = view.findViewById(R.id.sportDescriptionInput);
         EditText sportServiceInput = view.findViewById(R.id.sportServiceInput);
         Spinner sportTypeSpinner = view.findViewById(R.id.sportTypeSpinner);
-        Button editSportButton = view.findViewById(R.id.editSportButton);
+        Button addSportButton = view.findViewById(R.id.editSportButton);
 
         Sport sport = sportList.get(position);
         sportNameInput.setText(sport.getS_NAME());
@@ -119,7 +131,6 @@ public class ASportFragment extends Fragment {
         sportDistrictInput.setText(sport.getS_DISTRICT());
         sportPriceInput.setText(sport.getS_PRICE());
         sportDescriptionInput.setText(sport.getS_DESCRIPTION());
-        sportServiceInput.setText(sport.getS_SERVICE());
 
         // Populate spinner with category data
         List<category> categories = db.getAllCategories();
@@ -130,7 +141,7 @@ public class ASportFragment extends Fragment {
         builder.setView(view);
         AlertDialog dialog = builder.create();
 
-        editSportButton.setOnClickListener(v -> {
+        addSportButton.setOnClickListener(v -> {
             String sportName = sportNameInput.getText().toString().trim();
             String sportLocation = sportLocationInput.getText().toString().trim();
             String sportDistrict = sportDistrictInput.getText().toString().trim();
@@ -140,14 +151,13 @@ public class ASportFragment extends Fragment {
             String sportService = sportServiceInput.getText().toString();
 
             if (!sportName.isEmpty() && !sportLocation.isEmpty() && !sportDistrict.isEmpty() && !sportPrice.isEmpty() && !sportDescription.isEmpty()) {
-                db.updateBookingCourtName(sport.getS_NAME(), sportName);
                 Sport updatedSport = new Sport(sport.getS_ID(), sportType, sportName, sportLocation, sportDistrict, "", sportPrice, sportDescription, sportService);
                 db.updateSport(updatedSport);
                 sportList.set(position, updatedSport);
                 sportAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             } else {
-                // Show error message
+                    Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin trước khi sửa sân", Toast.LENGTH_SHORT).show();
             }
         });
 

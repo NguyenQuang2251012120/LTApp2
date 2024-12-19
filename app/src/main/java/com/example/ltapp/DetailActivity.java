@@ -107,7 +107,7 @@ public class DetailActivity extends AppCompatActivity {
             String loggedInUser = sharedPreferences.getString("User", null);
             if (loggedInUser != null) {
                 // Check if the sport is already in the user's favorites list
-                favorite sport1 = new favorite(loggedInUser, sportName, sportPrice, sportDistrict);
+                favorite sport1 = new favorite("" ,loggedInUser, sportName, sportPrice, sportDistrict);
                 boolean isFavorite = database.isSportFavorite(sport1);
                 if (isFavorite) {
                     // If it's already a favorite, remove it
@@ -157,7 +157,7 @@ public class DetailActivity extends AppCompatActivity {
             // Check if the content is not empty and the rating is greater than zero
             if (!content.isEmpty()) {
                 if (rating > 0) {  // Check if the rating is not zero
-                    Comment newComment = new Comment("", content, username, rating, sportName); // Use sportName as courtName
+                    Comment newComment = new Comment("", username, content, rating, sportName); // Use sportName as courtName
                     database.addComment(newComment);  // Add the new comment to the database
                     commentAdapter.addComment(newComment);  // Add the new comment to the list in the RecyclerView
 
